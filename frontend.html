@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Reservations</title>
+</head>
+<body>
+    <h1>Room Reservations</h1>
+
+    <main>
+        <section class="booking">
+            <h2>New reservation</h2>
+            <form id="bookingForm">
+                <label>
+                    Room number
+                    <input name="room" type="number" min="1" required>
+                </label>
+                <label>
+                    Reserved by
+                    <input name="reserved_by" required>
+                </label>
+                <label>
+                    Date
+                    <input name="date" type="date" required>
+                </label>
+                <label>
+                    Start time
+                    <input name="start_time" type="time" required>
+                </label>
+                <label>
+                    End time
+                    <input name="end_time" type="time" required>
+                </label>
+                <button>Save reservation</button>
+            </form>
+            <p id="message" role="status"></p>
+        </section>
+
+        
+</body>
+</html>
+
+
