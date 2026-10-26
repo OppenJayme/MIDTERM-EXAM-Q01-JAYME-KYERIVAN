@@ -37,7 +37,40 @@
             <p id="message" role="status"></p>
         </section>
 
-        
+        <section class="reservations">
+            <h2>Reservations</h2>
+            <form id="searchForm">
+                <label for="searchId">Find by ID</label>
+                <input id="searchId" type="number" min="1" placeholder="ID">
+                <button>Search</button>
+                <button type="button" onclick="loadReservations()">Show all</button>
+            </form>
+            <form id="deleteForm">
+                <label for="deleteId">Delete by ID</label>
+                <input id="deleteId" type="number" min="1" placeholder="ID" required>
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+            <p id="listMessage" role="status"></p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Room</th>
+                            <th>Reserved by</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservationList"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    
 </body>
 </html>
 
