@@ -61,7 +61,6 @@
                             <th>Date</th>
                             <th>Start</th>
                             <th>End</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="reservationList"></tbody>
@@ -70,7 +69,97 @@
         </section>
     </main>
 
-    
+    <script>
+        const form = document.getElementById("bookingForm");
+        const message = document.getElementById("message");
+        const listMessage = document.getElementById("listMessage");
+        const table = document.getElementById("reservationList");
+
+        function formatTime(time) {
+            const [hours, minutes] = time.split(":");
+            const hour = Number(hours);
+            const period = hour >= 12 ? "PM" : "AM";
+            return (hour % 12 || 12) + ":" + minutes + " " + period;
+        }
+
+        async function loadReservations(id = "") {
+            table.textContent = "";
+            listMessage.textContent = "Loading...";
+
+            try {
+                const response = await fetch("/api/reservations" + (id ? "/" + id : ""));
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                const reservations = id ? [data] : data;
+                for (const item of reservations) {
+                    const row = table.insertRow();
+                    const values = [item.id, item.room, item.reserved_by, item.date, formatTime(item.start_time), formatTime(item.end_time)];
+                    for (const value of values) row.insertCell().textContent = value;
+                }
+                listMessage.textContent = reservations.length ? "" : "No reservations yet.";
+            } catch (error) {
+                listMessage.textContent = error.message;
+            }
+        }
+
+        async function deleteReservation(id) {
+            try {
+                const response = await fetch("/api/reservations/" + id, {
+                    method: "DELETE"
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                await loadReservations();
+                listMessage.textContent = data.message;
+            } catch (error) {
+                listMessage.textContent = error.message;
+            }
+        }
+
+        document.getElementById("searchForm").onsubmit = function (event) {
+            event.preventDefault();
+            loadReservations(document.getElementById("searchId").value);
+        };
+
+        document.getElementById("deleteForm").onsubmit = function (event) {
+            event.preventDefault();
+            deleteReservation(document.getElementById("deleteId").value);
+        };
+
+        form.onsubmit = async function (event) {
+            event.preventDefault();
+            const reservation = Object.fromEntries(new FormData(form));
+            const [year, month, day] = reservation.date.split("-");
+            reservation.date = month + "/" + day + "/" + year;
+            reservation.room = Number(reservation.room);
+
+            const button = form.querySelector("button");
+            button.disabled = true;
+            message.textContent = "Saving...";
+
+            try {
+                const response = await fetch("/api/reservations", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(reservation)
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                form.reset();
+                message.textContent = "Reservation saved!";
+                await loadReservations();
+            } catch (error) {
+                message.textContent = error.message;
+            } finally {
+                button.disabled = false;
+            }
+        };
+
+        loadReservations();
+    </script>
 </body>
 </html>
 
