@@ -70,9 +70,8 @@ app.post("/api/reservations", (req, res) => {
     let nextId = 1;
     for (const item of reservations) {
         if (item.id >= nextId) nextId = item.id + 1;
-        if (item.room === data.room && item.date === data.date &&
-            data.start_time < item.end_time && data.end_time > item.start_time) {
-            return res.status(409).json({ message: "Room is already reserved" });
+        if (item.room === data.room && item.date === data.date) {
+            return res.status(409).json({ message: "Room is already reserved on this date" });
         }
     }
 
@@ -118,6 +117,7 @@ app.listen(PORT, () => {
     );
 
 });
+
 
 
 
