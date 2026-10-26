@@ -1,5 +1,8 @@
 midterm exam for ROOM RESERVATION SYSTEM.
 
+npm install
+node ./server.js
+
 Room Reservation System
 Create a Room Reservation System for a school or university.
 
@@ -11,7 +14,7 @@ date
 start_time
 end_time
 Requirements
-- A room cannot have more than one reservation on the same date.
+- A room cannot have more than one reservation on the same date. (but can if different time)
 - Before inserting a reservation, check whether the selected room already has a reservation for that date.
 - Reject the POST request if a conflicting reservation exists.
 - Display all room reservations.
